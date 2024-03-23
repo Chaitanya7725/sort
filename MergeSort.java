@@ -3,55 +3,45 @@ import java.util.Arrays;
 public class MergeSort {
 
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(sortArray(new int[]{4,2,3,1})));
+        System.out.println(Arrays.toString(sortArray(new int[]{1,2,1,1,2,3})));
     }
 
     public static int[] sortArray(int[] nums) {
-        int[] temporaryArray = new int[nums.length];
-        mergeSort(nums, 0, nums.length - 1, temporaryArray);
-        return nums;
+        return mergeSort(nums, 0, nums.length - 1);
     }
 
-    private static void mergeSort(int[] arr, int left, int right, int[] tempArr) {
-
-        if (left >= right)
-            return;
+    private static int[] mergeSort(int[] arr, int left, int right) {
+        if (left == right) return arr;
         int mid = (left + right) / 2;
-        mergeSort(arr, left, mid, tempArr);
-        mergeSort(arr, mid + 1, right, tempArr);
-        merge(arr, left, mid, right, tempArr);
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+        return arr;
     }
 
-    private static void merge(int[] arr, int left, int mid, int right, int[] tempArr) {
-        int start1 = left;
-        int start2 = mid + 1;
-        int n1 = mid - left + 1;
-        int n2 = right - mid;
-        for (int i = 0; i < n1; i++)
-            tempArr[start1 + i] = arr[start1 + i];
-        for (int i = 0; i < n2; i++)
-            tempArr[start2 + i] = arr[start2 + i];
-
-        int i = 0, j = 0, k = left;
-        while (i < n1 && j < n2) {
-            if (tempArr[start1 + i] <= tempArr[start2 + j]) {
-                arr[k] = tempArr[start1 + i];
-                i += 1;
-            } else {
-                arr[k] = tempArr[start2 + j];
+    private static void merge(int[] arr, int L, int M, int R) {
+        int [] left = Arrays.copyOfRange(arr,L,M+1);
+        int [] right = Arrays.copyOfRange(arr,M+1,R+1);
+        int i = L,j=0,k=0;
+        while (j < left.length && k < right.length) {
+            if (left[j]<=right[k]) {
+                arr[i] = left[j];
                 j += 1;
+            } else {
+                arr[i] = right[k];
+                k += 1;
             }
-            k += 1;
-        }
-        while (i < n1) {
-            arr[k] = tempArr[start1 + i];
             i += 1;
-            k += 1;
         }
-        while (j < n2) {
-            arr[k] = tempArr[start2 + j];
+        while (j < left.length) {
+            arr[i] = left[j];
             j += 1;
+            i += 1;
+        }
+        while (k < right.length) {
+            arr[i] = right[k];
             k += 1;
+            i += 1;
         }
     }
 
